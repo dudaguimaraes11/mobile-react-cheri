@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
     View,
     Text,
@@ -8,7 +9,6 @@ import {
     TouchableOpacity,
     Alert,
     ScrollView,
-    SafeAreaView,
 } from 'react-native';
 
 const produtos = [
@@ -55,55 +55,50 @@ export default function App() {
         Alert.alert('Produto selecionado', nome);
     };
 
-    const renderItem = ({ item }) => {
-        const caminhoImagem = typeof item.imagem === 'string' ? { uri: item.imagem } : item.imagem;
+    const caminhoImagem = typeofitem.imagem === 'string' ? { uri: item.imagem } : item.imagem;
 
-        return (
-            <View style={styles.itemContainer}>
-                {/* O card agora expande dinamicamente envolvendo todo o conteúdo */}
-                <View style={styles.card}>
-                    <Image source={caminhoImagem} style={styles.imagem} />
-
-                    {/* Agrupamos os textos em uma View para melhor controle de espaçamento interno */}
-                    <View style={styles.textoContainer}>
-                        <Text style={styles.nome} numberOfLines={2}>
-                            {item.nome}
-                        </Text>
-                        <Text style={styles.preco}>{item.preco}</Text>
-                    </View>
-                </View>
-
-                <TouchableOpacity style={styles.botao} onPress={() => comprarProduto(item.nome)}>
-                    <Text style={styles.textoBotao}>Comprar agora</Text>
-                </TouchableOpacity>
+    return (
+        <View style={styles.itemContainer} >
+            <View style={styles.card}>
+                <Image source={caminhoImagem} style={styles.imagem} />
             </View>
-        );
-    };
+
+            <View style={styles.textoContainer}>
+                <Text style={styles.nome} numberOfLines={2}> {item.nome}
+                </Text>
+                <Text style={styles.preco}>{item.preco}</Text>
+            </View>
+
+            <TouchableOpacity style={styles.botao} onPress={() => comprarProduto(item.nome)}>
+                <Text style={styles.textoBotao}> Comprar agora</Text>
+            </TouchableOpacity>
+        </View>
+    );
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#e6d5d5' }}>
-            <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-                <View style={styles.header}>
-                    <Text style={styles.titulo}>🍸 CHÉRIE{'\n'}CHÉRIE 🍸</Text>
-                </View>
-
-                <FlatList
-                    data={produtos}
-                    renderItem={renderItem}
-                    keyExtractor={(item) => item.id}
-                    numColumns={2}
-                    columnWrapperStyle={styles.row}
-                    scrollEnabled={false}
+        <ScrollView style={styles.container} showVerticalScrollIndicator={false}>
+            <View style={styles.header}>
+                <Text style={styles.titulo}> 🍸CHÉRIE{'/n'} 🍸</Text>
+            </View>
+            <FlatList
+                data={produtos}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.id}
+                numColumns={2}
+                columnWrapperStyle={styles.row}
+                scrollEnabled={false}
                 />
 
-                <View style={styles.banner}>
-                    <Text style={styles.bannerTitulo}>THE PEPTIDE LIPTINT</Text>
-                    <Image source={require('./assets/kit.png')} style={styles.bannerImagem} />
-                </View>
-            </ScrollView>
-        </SafeAreaView>
-    );
-}
+            <View style={styles.banner}>
+                <Text style={styles.bannerTitulo}> THE PEPTIDE LIPTINT </Text>
+            <Image source={require('./assets/kit.png')} style={styles.bannerImagem} />
+            </View>
+        </ScrollView>
+    </SafeAreaView>
+);
+
+};
 
 const styles = StyleSheet.create({
     container: {
