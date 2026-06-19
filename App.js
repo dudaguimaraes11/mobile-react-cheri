@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
     View,
     Text,
@@ -8,7 +7,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     Alert,
-    ScrollView,
+    SafeAreaView,
 } from 'react-native';
 
 const produtos = [
@@ -55,71 +54,77 @@ export default function App() {
         Alert.alert('Produto selecionado', nome);
     };
 
-    const caminhoImagem = typeofitem.imagem === 'string' ? { uri: item.imagem } : item.imagem;
-
-    return (
-        <View style={styles.itemContainer} >
+    const renderItem = ({ item }) => (
+        <View style={styles.itemContainer}>
             <View style={styles.card}>
-                <Image source={caminhoImagem} style={styles.imagem} />
-            </View>
+                <Image source={item.imagem} style={styles.imagem} />
 
-            <View style={styles.textoContainer}>
-                <Text style={styles.nome} numberOfLines={2}> {item.nome}
-                </Text>
-                <Text style={styles.preco}>{item.preco}</Text>
+                <View style={styles.textoContainer}>
+                    <Text style={styles.nome} numberOfLines={2}>
+                        {item.nome}
+                    </Text>
+
+                    <Text style={styles.preco}>{item.preco}</Text>
+                </View>
             </View>
 
             <TouchableOpacity style={styles.botao} onPress={() => comprarProduto(item.nome)}>
-                <Text style={styles.textoBotao}> Comprar agora</Text>
+                <Text style={styles.textoBotao}>Comprar agora</Text>
             </TouchableOpacity>
         </View>
     );
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#e6d5d5' }}>
-        <ScrollView style={styles.container} showVerticalScrollIndicator={false}>
-            <View style={styles.header}>
-                <Text style={styles.titulo}> 🍸CHÉRIE{'/n'} 🍸</Text>
-            </View>
+        <SafeAreaView style={styles.safeArea}>
             <FlatList
                 data={produtos}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id}
                 numColumns={2}
                 columnWrapperStyle={styles.row}
-                scrollEnabled={false}
-                />
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.container}
+                ListHeaderComponent={
+                    <View style={styles.header}>
+                        <Text style={styles.titulo}>🍸 CHÉRIE 🍸</Text>
+                    </View>
+                }
+                ListFooterComponent={
+                    <View style={styles.banner}>
+                        <Text style={styles.bannerTitulo}>THE PEPTIDE LIP TINT</Text>
 
-            <View style={styles.banner}>
-                <Text style={styles.bannerTitulo}> THE PEPTIDE LIPTINT </Text>
-            <Image source={require('./assets/kit.png')} style={styles.bannerImagem} />
-            </View>
-        </ScrollView>
-    </SafeAreaView>
-);
-
-};
+                        <Image source={require('./assets/kit.png')} style={styles.bannerImagem} />
+                    </View>
+                }
+            />
+        </SafeAreaView>
+    );
+}
 
 const styles = StyleSheet.create({
-    container: {
+    safeArea: {
         flex: 1,
         backgroundColor: '#e6d5d5',
-        paddingHorizontal: 12,
-        paddingTop: 20,
+    },
+
+    container: {
+        padding: 12,
     },
 
     header: {
-        backgroundColor: '#6b2d36',
-        paddingVertical: 15,
-        borderRadius: 8,
-        marginBottom: 20,
+        backgroundColor: '#7a2f3c',
+        borderRadius: 18,
+        paddingVertical: 16,
+        marginBottom: 18,
+        justifyContent: 'center',
         alignItems: 'center',
     },
 
     titulo: {
         color: '#fff',
-        fontSize: 24,
-        fontWeight: 'bold',
+        fontSize: 28,
+        fontWeight: '900',
+        letterSpacing: 2,
         textAlign: 'center',
     },
 
@@ -128,25 +133,24 @@ const styles = StyleSheet.create({
     },
 
     itemContainer: {
-        width: '48%',
-        marginBottom: 20,
+        width: '48.5%',
+        marginBottom: 18,
     },
 
     card: {
-        backgroundColor: '#f1c1c7',
-        borderRadius: 15,
-        borderWidth: 1,
-        borderColor: '#6b2d36',
-        padding: 12,
-        // CORREÇÃO: Removemos o height fixo e deixamos o flexGrow segurar as pontas
-        flexGrow: 1,
-        justifyContent: 'space-between',
+        backgroundColor: '#e7bcc4',
+        borderRadius: 22,
+        paddingVertical: 16,
+        paddingHorizontal: 12,
         alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#c99aa3',
+        minHeight: 220,
     },
 
     imagem: {
-        width: 100,
-        height: 100,
+        width: 110,
+        height: 110,
         resizeMode: 'contain',
         marginBottom: 10,
     },
@@ -154,61 +158,61 @@ const styles = StyleSheet.create({
     textoContainer: {
         width: '100%',
         alignItems: 'center',
-        justifyContent: 'flex-end',
-        flexGrow: 1,
     },
 
     nome: {
         textAlign: 'center',
-        fontSize: 14,
-        color: '#333',
-        fontWeight: '500',
-        marginBottom: 4,
+        fontSize: 15,
+        fontWeight: '600',
+        color: '#2d2d2d',
+        minHeight: 38,
+        paddingHorizontal: 4,
     },
 
     preco: {
         textAlign: 'center',
-        fontSize: 13,
-        fontWeight: 'bold',
-        color: '#6b2d36',
-        marginTop: 'auto', // Empurra o preço sempre para o final da caixinha de textos
+        fontSize: 20,
+        fontWeight: '800',
+        color: '#7a2f3c',
+        marginTop: 4,
     },
 
     botao: {
-        backgroundColor: '#6b2d36',
-        paddingVertical: 10,
-        borderRadius: 20,
+        backgroundColor: '#7a2f3c',
+        borderRadius: 24,
+        height: 46,
+        justifyContent: 'center',
+        alignItems: 'center',
         marginTop: 8,
     },
 
     textoBotao: {
         color: '#fff',
-        textAlign: 'center',
-        fontWeight: 'bold',
-        fontSize: 11,
+        fontSize: 13,
+        fontWeight: '700',
     },
 
     banner: {
-        backgroundColor: '#f1c1c7',
-        borderRadius: 15,
+        backgroundColor: '#e7bcc4',
+        borderRadius: 22,
+        padding: 16,
+        marginTop: 6,
+        alignItems: 'center',
         borderWidth: 1,
-        borderColor: '#6b2d36',
-        padding: 12,
-        marginBottom: 45,
-        marginTop: 15,
+        borderColor: '#c99aa3',
     },
 
     bannerTitulo: {
         textAlign: 'center',
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#6b2d36',
+        fontSize: 20,
+        fontWeight: '800',
+        color: '#7a2f3c',
+        marginBottom: 8,
     },
 
     bannerImagem: {
         width: '100%',
-        height: 160,
-        borderRadius: 10,
+        height: 180,
         resizeMode: 'contain',
     },
-});
+}); 
